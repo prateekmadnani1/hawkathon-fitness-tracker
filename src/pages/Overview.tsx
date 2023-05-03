@@ -43,6 +43,10 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         navigate('/groups')
     }
 
+    function logout() {
+        navigate('/')
+    }
+
     function joinGroup(elem: any, groupId: any) {
         setPopUpStatus(true)
         console.log(elem, groupId);
@@ -166,9 +170,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         {/* -------------------------------------------------------------------------------------- */}
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
-                <MDBBtn rounded onClick={viewGroups}>View Groups</MDBBtn>
-                <MDBBtn rounded onClick={toggleShow}>Join Groups</MDBBtn>
-                <MDBBtn rounded onClick={test}>Log out</MDBBtn>
+                <MDBBtn rounded onClick={logout}>Log out</MDBBtn>
 
             </MDBContainer>
         </MDBNavbar>
@@ -181,20 +183,28 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
       </thead>
       <tbody>
         <tr>
-          <td>{userName}</td>
+          <td>UserName - {userName}</td>
         </tr>
         <tr>
-          <td>User Email Address</td>
+          <td>User Email Address - </td>
         </tr>
         <tr>
-          <td>current Step count</td>
+          <td>current Step count - </td>
         </tr>
       </tbody>
     </table>
     </div>
 
 
-    <div>Participation</div>
+    <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Participation</th>
+        </tr>
+      </thead>
+      </table>
+    </div>
 
     <div>
     <table>
@@ -214,7 +224,15 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
     </table>
     </div>
 
-    <div>On Going Challenges</div>
+    <div>
+    <table>
+      <thead>
+        <tr>
+          <th>On Going Challenges</th>
+        </tr>
+      </thead>
+      </table>
+    </div>
 
     </>)
 }
