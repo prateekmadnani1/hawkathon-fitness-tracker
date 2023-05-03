@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import './Table.css';
 import axios from "axios";
 import {
     MDBContainer,
@@ -18,6 +20,8 @@ import Popup from '../components/Modals/Popup';
 interface OverviewProps {
     userName: any;
 }
+const div = document.createElement("div");
+div.style.fontWeight = "bold";
 const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
     const [scrollableModal, setScrollableModal] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState();
@@ -25,7 +29,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
     const [post, setPost] = useState<any>();
     const [error, setError] = React.useState(null);
     const [popStatus, setPopUpStatus] = useState<any>(false);
-
+    const navigate = useNavigate();
     const baseURL: any = "http://0.0.0.0:9001/GetAllGroups"
 
     function test(e: any) {
@@ -34,6 +38,9 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
 
     function setConfirmationStatus(e: any) {
         setConfirmStatus(e);
+    }
+    function viewGroups() {
+        navigate('/groups')
     }
 
     function joinGroup(elem: any, groupId: any) {
@@ -80,6 +87,10 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
             setAllgroup(response.data);
         });
     }, []);
+
+    useEffect(() => {
+        console.log(`Hello, ${userName}!`);
+      }, [userName]);
 
     console.log(allgroup);
     const [basicModal, setBasicModal] = useState(false);
@@ -138,7 +149,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         </MDBModal>
 
 
-
+    
 
         {confirmStatus && <ConfirmationModal confirmationStatus={confirmStatus}></ConfirmationModal>
         }
@@ -155,12 +166,56 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         {/* -------------------------------------------------------------------------------------- */}
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
-                <MDBBtn rounded onClick={test}>View Groups</MDBBtn>
+                <MDBBtn rounded onClick={viewGroups}>View Groups</MDBBtn>
                 <MDBBtn rounded onClick={toggleShow}>Join Groups</MDBBtn>
                 <MDBBtn rounded onClick={test}>Log out</MDBBtn>
 
             </MDBContainer>
         </MDBNavbar>
+    <div>
+    <table>
+      <thead>
+        <tr>
+          <th>User Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{userName}</td>
+        </tr>
+        <tr>
+          <td>User Email Address</td>
+        </tr>
+        <tr>
+          <td>current Step count</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+    <div>Participation</div>
+
+    <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Challenge Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Steps</td>
+        </tr>
+        <tr>
+          <td>Step Count</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div>On Going Challenges</div>
+
     </>)
 }
 export default Overview;
