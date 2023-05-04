@@ -24,7 +24,7 @@ const Login: React.FunctionComponent<LoginProps> = ({ pushLoginCreds }) => {
         const mailId: any = document.getElementById("mail")
         const password: any = document.getElementById("password");
         const userName: any = document.getElementById("user");
-        pushLoginCreds(userName.value, mailId.value, password.value)
+        pushLoginCreds(userName.value, password.value)
     }
     return (<>
         <MDBContainer className="my-5">
@@ -45,7 +45,7 @@ const Login: React.FunctionComponent<LoginProps> = ({ pushLoginCreds }) => {
 
                             <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
                             <MDBInput wrapperClass='mb-4' label='user name' id='user' type='email' size="lg" />
-                            <MDBInput wrapperClass='mb-4' label='Email address' id='mail' type='email' size="lg" />
+                            {/* <MDBInput wrapperClass='mb-4' label='Email address' id='mail' type='email' size="lg" /> */}
                             <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' size="lg" />
 
                             <MDBBtn className="mb-4 px-5" color='dark' size='lg' onClick={checkUserCreds}>Login</MDBBtn>

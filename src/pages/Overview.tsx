@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import './Table.css';
 import axios from "axios";
 import {
-  MDBContainer,
-  MDBNavbar,
   MDBBtn,
   MDBModal,
   MDBModalDialog,
@@ -17,14 +15,8 @@ import {
   MDBCardBody,
   MDBCardTitle,
   MDBCardText,
-  MDBCardImage,
 } from 'mdb-react-ui-kit';
-import Dialog from 'react-bootstrap-dialog';
 
-import { JoinGroupForm } from '../components/JoinGroupForm';
-import { ConfirmationModal } from '../components/Modals/ConfirmationModal';
-import Popup from '../components/Modals/Popup';
-import { JoinChallengePage } from './JoinChallengePage';
 import { NavBar } from '../components/NavBar';
 interface OverviewProps {
   userName: any;
@@ -33,16 +25,20 @@ const div = document.createElement("div");
 div.style.fontWeight = "bold";
 const Overview: React.FunctionComponent<OverviewProps> = () => {
   const [optSmModal, setOptSmModal] = useState(false);
-  const [scrollableModal, setScrollableModal] = useState(false);
+  const [leaderBoardStatus, setleaderBoardStatus] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState(false);
   const [allChallenges, setAllChallenges] = useState(null);
   const [userDetails, setUserDetails] = useState<any>(null)
+  const [currentChallenge, setCurrentChallenge] = useState<any>();
   const [post, setPost] = useState<any>();
+
   const [error, setError] = React.useState(null);
   const [stepCount, setStepCount] = useState<any>();
   const [joinChallengeStatus, setJoinChallengeStatus] = useState<any>()
   const [userChlId, setUserChlId] = useState();
-  const navigate = useNavigate();
+  const [challengeId, setChallengeId] = useState();
+  const [leaderBoardData, setLeaderBoardData] = useState<any>();
+
   const baseURL: any = "http://0.0.0.0:9001"
 
   function checkForSwitch() {
@@ -74,8 +70,12 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       });
   }
 
-  console.log(post);
   useEffect(() => {
+
+    axios.get(`${baseURL}/my_active_challenge?username=${sessionStorage.getItem("userName")}`).then((response) => {
+      setCurrentChallenge(response.data.name)
+    });
+
     axios.get(`${baseURL}/all_challenges`).then((response) => {
       setAllChallenges(response.data)
     });
@@ -100,18 +100,26 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
 
   }, [confirmStatus]);
 
-  console.log(userDetails);
+
+  function leaderBoard(challengeId: any) {
+
+    axios.get(`${baseURL}/challenge_by_id?challenge_id=${challengeId}`).then((response) => {
+      setLeaderBoardData(response.data)
+    });
 
 
 
-  const [basicModal, setBasicModal] = useState(false);
+
+    setChallengeId(challengeId);
+    setleaderBoardStatus(true)
+
+  }
+  const toggleShowLeaderBoard = () => setleaderBoardStatus(!leaderBoard);
 
   const toggleShow = () => setOptSmModal(!optSmModal);
   const handleJoinChallengeStatus = () => {
     setOptSmModal(!optSmModal);
     assignToChallenge(userChlId);
-
-
   }
   const toggleConfirmation = () => setConfirmStatus(!confirmStatus)
   return (<>
@@ -144,7 +152,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
           <MDBModalBody className='py-1'>
             <div className='d-flex justify-content-center align-items-center my-3'>
               <p className='mb-0'>added to new challenge</p>
-              <MDBBtn color='success' size='sm' className='ms-2' onClick={toggleShow}>
+              <MDBBtn color='success' size='sm' className='ms-2' onClick={toggleConfirmation}>
                 Ok, thanks
               </MDBBtn>
             </div>
@@ -152,6 +160,39 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
         </MDBModalContent>
       </MDBModalDialog>
     </MDBModal>
+
+
+    {leaderBoardData && <MDBModal tabIndex='-1' show={leaderBoardStatus} setShow={setleaderBoardStatus}>
+      <MDBModalDialog centered>
+        <MDBModalContent>
+          <MDBModalHeader>
+            <MDBModalTitle>{leaderBoardData.name}</MDBModalTitle>
+            <MDBBtn className='btn-close' color='none' onClick={toggleShowLeaderBoard}></MDBBtn>
+          </MDBModalHeader>
+          <MDBModalBody>
+
+            {Object.entries(leaderBoardData?.participation_score).map(([key, elem]: any) => (
+              <p><strong>{`${key} --> ${elem}`}</strong></p>
+
+
+            ))}
+
+            {Object.keys(leaderBoardData?.participation_score).length === 0 && <p>no participents</p>}
+
+          </MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn color='secondary' onClick={toggleShowLeaderBoard}>
+              Close
+            </MDBBtn>
+          </MDBModalFooter>
+        </MDBModalContent>
+      </MDBModalDialog>
+    </MDBModal>}
+
+
+
+
+
 
     <div className="text-center">
       <table>
@@ -162,13 +203,13 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
         </thead>
         <tbody>
           <tr>
-            <td><strong>UserName -</strong> {sessionStorage.getItem("userName")}</td>
+            <td><strong>UserName - {sessionStorage.getItem("userName")}</strong></td>
           </tr>
-          <tr>
+          {/* <tr>
             <td><strong>User Email Address -</strong> {sessionStorage.getItem("mail")}</td>
-          </tr>
+          </tr> */}
           <tr>
-            <td><strong>Current Step Count - </strong></td>
+            <td><strong>Current Step Count - {stepCount?.steps}</strong></td>
           </tr>
         </tbody>
       </table>
@@ -185,7 +226,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
         </thead>
         <tbody>
           <tr>
-            <td><strong>Challenge Name -</strong></td>
+            <td><strong>Challenge Name -{currentChallenge}</strong></td>
           </tr>
           <tr>
             <td><strong>Step Count -{stepCount?.steps}</strong></td>
@@ -212,12 +253,20 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
             {allChallenges &&
               Object.values(allChallenges).map((elem: any) => (
                 <div key={elem.id} className="d-flex justify-content-between">
-                  <p>{userDetails?.challenge_id && elem.id != userDetails?.challenge_id && `${elem.name}  (${elem.startDate} - ${elem.endDate})`}</p>
+                  <p>{userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <strong> `${elem.name}  (${elem.startDate} - ${elem.endDate})`</strong>}</p>
                   <div className="align-self-center">
                     {userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>
                       join Challenge
                     </MDBBtn>}
                   </div>
+
+                  <div className="align-self-center">
+                    {userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <MDBBtn rounded onClick={() => leaderBoard(elem.id)}>
+                      Leader Board
+                    </MDBBtn>}
+                  </div>
+
+
                 </div>
               ))}
           </MDBCardText>

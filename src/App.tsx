@@ -13,22 +13,22 @@ function App() {
   const [post, setPost] = useState<any>();
   const [loginStatus, setLoginStatus] = useState<any>(false)
   const [userName, setUserName] = useState<any>();
-  const getLoginCreds = (userName: any, mail: any, password: any) => {
+  const getLoginCreds = (userName: any, password: any) => {
 
-    if (userName && mail && password) {
+    if (userName && password) {
       sessionStorage.setItem("userName", userName);
-      sessionStorage.setItem("mail", mail);
+      // sessionStorage.setItem("mail", mail);
 
-      setUserName(userName)
-      const baseURL = `http://0.0.0.0:9001/signup?username=${userName}&email=${mail}&password=${password}`
-      axios
-        .post(baseURL, {
-          title: "Hello World!",
-          body: "This is a new post."
-        })
-        .then((response: any) => {
-          setPost(response.data);
-        });
+      // setUserName(userName)
+      // const baseURL = `http://0.0.0.0:9001/signup?username=${userName}&email=${mail}&password=${password}`
+      // axios
+      //   .post(baseURL, {
+      //     title: "Hello World!",
+      //     body: "This is a new post."
+      //   })
+      //   .then((response: any) => {
+      //     setPost(response.data);
+      //   });
 
 
 
