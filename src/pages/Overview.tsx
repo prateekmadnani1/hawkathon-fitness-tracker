@@ -13,11 +13,18 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardImage,
 } from 'mdb-react-ui-kit';
+
 import { JoinGroupForm } from '../components/JoinGroupForm';
 import { ConfirmationModal } from '../components/Modals/ConfirmationModal';
 import Popup from '../components/Modals/Popup';
 import { JoinChallengePage } from './JoinChallengePage';
+import { NavBar } from '../components/NavBar';
 interface OverviewProps {
   userName: any;
 }
@@ -26,12 +33,12 @@ div.style.fontWeight = "bold";
 const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
   const [scrollableModal, setScrollableModal] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState();
-  const [allgroup, setAllgroup] = React.useState({});
+  const [allChallenges, setAllChallenges] = React.useState({});
   const [post, setPost] = useState<any>();
   const [error, setError] = React.useState(null);
   const [popStatus, setPopUpStatus] = useState<any>(false);
   const navigate = useNavigate();
-  const baseURL: any = "http://0.0.0.0:9001/GetAllGroups"
+  const baseURL: any = "http://0.0.0.0:9001"
 
   function test(e: any) {
     setScrollableModal(!scrollableModal)
@@ -48,34 +55,35 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
     navigate('/')
   }
 
-  function joinGroup(elem: any, groupId: any) {
-    setPopUpStatus(true)
-    console.log(elem, groupId);
-    const groupName = elem
+  // function joinGroup(elem: any, groupId: any) {
+  //   setPopUpStatus(true)
+  //   console.log(elem, groupId);
+  //   const groupName = elem
 
 
-    // const baseURL = `http://0.0.0.0:9001/groups?username=${userName}&group_id=${groupId}&group_name=${groupName}&switch_group=${switchStatus}`
-    // axios
-    //     .post(baseURL, {
-    //         title: "join group",
-    //         body: "This is a new post."
-    //     })
-    //     .then((response) => {
-    //         setPost(response.data)
-    //     }).catch(error => {
-    //         setError(error);
-    //     });
-    // if (post) {
-    //     setConfirmStatus(post)
-    // }
-    // else if (error) {
-    //     setConfirmStatus(error);
-    // }
-  }
+  // const baseURL = `http://0.0.0.0:9001/groups?username=${userName}&group_id=${groupId}&group_name=${groupName}&switch_group=${switchStatus}`
+  // axios
+  //     .post(baseURL, {
+  //         title: "join group",
+  //         body: "This is a new post."
+  //     })
+  //     .then((response) => {
+  //         setPost(response.data)
+  //     }).catch(error => {
+  //         setError(error);
+  //     });
+  // if (post) {
+  //     setConfirmStatus(post)
+  // }
+  // else if (error) {
+  //     setConfirmStatus(error);
+  // }
+  //}
   const handleClosePopup = () => {
     setPopUpStatus(false);
   };
 
+  console.log(sessionStorage.getItem("userName"));
 
   const handleOK = () => {
     console.log('OK button clicked');
@@ -88,22 +96,20 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
   };
 
   useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setAllgroup(response.data);
+    axios.get(`${baseURL}/all_challenges`).then((response) => {
+      setAllChallenges(response.data);
     });
-  }, []);
+  }, [allChallenges]);
 
-  useEffect(() => {
-    console.log(`Hello, ${userName}!`);
-  }, [userName]);
 
-  console.log(allgroup);
+
   const [basicModal, setBasicModal] = useState(false);
 
   const toggleShow = () => setBasicModal(!basicModal);
   return (<>
+    <NavBar></NavBar>
 
-    <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
+    {/* <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
       <MDBModalDialog>
         <MDBModalContent>
           <MDBModalHeader>
@@ -115,10 +121,10 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
           </MDBModalBody>
         </MDBModalContent>
       </MDBModalDialog>
-    </MDBModal>
+    </MDBModal> */}
 
 
-    <MDBModal show={scrollableModal} setShow={setScrollableModal} tabIndex='-1'>
+    {/* <MDBModal show={scrollableModal} setShow={setScrollableModal} tabIndex='-1'>
       <MDBModalDialog scrollable>
         <MDBModalContent>
           <MDBModalHeader>
@@ -151,21 +157,21 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
           </MDBModalFooter>
         </MDBModalContent>
       </MDBModalDialog>
-    </MDBModal>
+    </MDBModal> */}
 
 
 
 
-    {confirmStatus && <ConfirmationModal confirmationStatus={confirmStatus}></ConfirmationModal>
-    }
+    {/* {confirmStatus && <ConfirmationModal confirmationStatus={confirmStatus}></ConfirmationModal>
+    } */}
 
-    {popStatus && (
+    {/* {popStatus && (
       <Popup
         message="Are you sure you want to do this?"
         onOK={handleOK}
         onCancel={handleCancel}
       />
-    )}
+    )} */}
 
 
     {/* -------------------------------------------------------------------------------------- */}
@@ -184,10 +190,10 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         </thead>
         <tbody>
           <tr>
-            <td>UserName - {userName}</td>
+            <td>UserName - {sessionStorage.getItem("userName")}</td>
           </tr>
           <tr>
-            <td>User Email Address - </td>
+            <td>User Email Address - {sessionStorage.getItem("mail")}</td>
           </tr>
           <tr>
             <td>current Step count - </td>
@@ -236,7 +242,15 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
     </div>
 
     <div>
-      <JoinChallengePage info={undefined}></JoinChallengePage>
+      <MDBCard>
+        <MDBCardBody>
+          <MDBCardTitle>Join Challenge</MDBCardTitle>
+          <MDBCardText>
+
+
+          </MDBCardText>
+        </MDBCardBody>
+      </MDBCard>
     </div>
 
   </>)

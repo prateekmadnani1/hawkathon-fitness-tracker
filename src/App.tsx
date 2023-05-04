@@ -14,7 +14,11 @@ function App() {
   const [loginStatus, setLoginStatus] = useState<any>(false)
   const [userName, setUserName] = useState<any>();
   const getLoginCreds = (userName: any, mail: any, password: any) => {
+
     if (userName && mail && password) {
+      sessionStorage.setItem("userName", userName);
+      sessionStorage.setItem("mail", mail);
+
       setUserName(userName)
       const baseURL = `http://0.0.0.0:9001/signup?username=${userName}&email=${mail}&password=${password}`
       axios
@@ -33,7 +37,6 @@ function App() {
   }
   return (
     <>
-      <NavBar></NavBar>
       <Routes>
         <Route path='/' element={<Login pushLoginCreds={getLoginCreds} />} ></Route>
         <Route path='/overview' element={<Overview userName={userName} />}></Route>
