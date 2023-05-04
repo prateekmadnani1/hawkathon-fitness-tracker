@@ -39,37 +39,42 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
   const [userDetails, setUserDetails] = useState<any>(null)
   const [post, setPost] = useState<any>();
   const [error, setError] = React.useState(null);
-  const [popStatus, setPopUpStatus] = useState<any>(false);
-  const [joinChallengeStatus, setJoinChallengeStatus] = useState<any>(false)
+  const [stepCount, setStepCount] = useState<any>();
+  const [joinChallengeStatus, setJoinChallengeStatus] = useState<any>()
+  const [userChlId, setUserChlId] = useState();
   const navigate = useNavigate();
   const baseURL: any = "http://0.0.0.0:9001"
 
-  function handleJoinChallenge(this: any, id: any) {
-    console.log(id);
+  function checkForSwitch() {
+    setOptSmModal(!optSmModal);
+
+  }
+  function handleJoinChallenge(id: any) {
+    setUserChlId(id);
     if (userDetails.challenge_id) {
-      // setJoinChallengeStatus(false)
-      setOptSmModal(!optSmModal);
+      setJoinChallengeStatus(false)
+      checkForSwitch();
     }
-    setJoinChallengeStatus(true)
-    if (joinChallengeStatus) {
-      const url = `${baseURL}/join_challenge?username=${sessionStorage.getItem("userName")}&challenge_id=${id}`
-      axios
-        .post(url, {
-          title: "Hello World!",
-          body: "This is a new post."
-        })
-        .then((response) => {
-          setPost(response);
-          setJoinChallengeStatus(false)
-        });
+    else {
+      assignToChallenge(id);
     }
+  }
+  function assignToChallenge(id: any) {
+    const url = `${baseURL}/join_challenge?username=${sessionStorage.getItem("userName")}&challenge_id=${id}`
+    axios
+      .post(url, {
+        title: "Hello World!",
+        body: "This is a new post."
+      })
+      .then((response) => {
+        setPost(response);
+        if (response.status === 200) {
+          setConfirmStatus(true)
+        }
+      });
   }
 
   console.log(post);
-
-
-  console.log(sessionStorage.getItem("userName"));
-
   useEffect(() => {
     axios.get(`${baseURL}/all_challenges`).then((response) => {
       setAllChallenges(response.data)
@@ -83,7 +88,17 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       .then((response) => {
         setUserDetails(response.data);
       });
-  }, [joinChallengeStatus]);
+
+    axios
+      .post(`${baseURL}/todays_steps?username=${sessionStorage.getItem("userName")}`, {
+        title: "Hello World!",
+        body: "This is a new post."
+      })
+      .then((response) => {
+        setStepCount(response.data);
+      });
+
+  }, [confirmStatus]);
 
   console.log(userDetails);
 
@@ -93,8 +108,9 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
 
   const toggleShow = () => setOptSmModal(!optSmModal);
   const handleJoinChallengeStatus = () => {
-    setJoinChallengeStatus(true)
     setOptSmModal(!optSmModal);
+    assignToChallenge(userChlId);
+
 
   }
   const toggleConfirmation = () => setConfirmStatus(!confirmStatus)
@@ -127,12 +143,9 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
         <MDBModalContent>
           <MDBModalBody className='py-1'>
             <div className='d-flex justify-content-center align-items-center my-3'>
-              <p className='mb-0'>We use cookies to improve your website experience</p>
+              <p className='mb-0'>added to new challenge</p>
               <MDBBtn color='success' size='sm' className='ms-2' onClick={toggleShow}>
                 Ok, thanks
-              </MDBBtn>
-              <MDBBtn size='sm' className='ms-2'>
-                Learn more
               </MDBBtn>
             </div>
           </MDBModalBody>
@@ -155,7 +168,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
             <td>User Email Address - {sessionStorage.getItem("mail")}</td>
           </tr>
           <tr>
-            <td>Current Step Count - </td>
+            <td>Current Step Count - {stepCount?.steps}</td>
           </tr>
         </tbody>
       </table>
@@ -207,12 +220,13 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
           <MDBCardText>
             {allChallenges && Object.values(allChallenges).map((elem: any) => (
               <div key={elem.id}>
-                <p>{elem.name}</p>
+                <p>{userDetails?.challenge_id && elem.id != userDetails?.challenge_id && `${elem.name}  (${elem.startDate} - ${elem.endDate})`}</p>
                 <div>
-                  <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>join Challenge</MDBBtn>
+                  {userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>join Challenge</MDBBtn>}
                 </div>
               </div>
             ))}
+
 
           </MDBCardText>
         </MDBCardBody>
