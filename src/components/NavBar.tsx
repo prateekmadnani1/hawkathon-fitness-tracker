@@ -16,6 +16,9 @@ export const NavBar: React.FunctionComponent<NavBarProps> = () => {
         navigate("/overview")
         // setBasicModal(!basicModal)
     }
+    function logout(e:any) {
+        navigate("/");
+    }
 
 
 
@@ -25,7 +28,7 @@ export const NavBar: React.FunctionComponent<NavBarProps> = () => {
             <MDBContainer fluid>
                 {/* <MDBBtn rounded onClick={test}>Join Challenge</MDBBtn>
                 <MDBBtn rounded onClick={toggleShow}>Home</MDBBtn> */}
-                <MDBBtn rounded onClick={test}>Log out</MDBBtn>
+                <MDBBtn rounded onClick={logout}>Log out</MDBBtn>
             </MDBContainer>
         </MDBNavbar>
 

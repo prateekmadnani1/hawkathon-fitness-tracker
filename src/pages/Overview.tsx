@@ -196,7 +196,7 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
             <td>User Email Address - {sessionStorage.getItem("mail")}</td>
           </tr>
           <tr>
-            <td>current Step count - </td>
+            <td>Current Step Count - </td>
           </tr>
         </tbody>
       </table>
