@@ -256,8 +256,13 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
             {allChallenges &&
               Object.values(allChallenges).map((elem: any) => (
                 <div key={elem.id} className="d-flex justify-content-between">
-                  <p>{userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <strong> `${elem.name}  (${elem.startDate} - ${elem.endDate})`</strong>}</p>
-                  <div className="align-self-center">
+                  <p>
+                    {userDetails?.challenge_id && elem.id !== userDetails?.challenge_id &&
+                      <strong>
+                        {`${elem.name} (${elem.startDate} - ${elem.endDate})`}
+                      </strong>
+                    }
+                  </p>                  <div className="align-self-center">
                     {userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>
                       join Challenge
                     </MDBBtn>}
