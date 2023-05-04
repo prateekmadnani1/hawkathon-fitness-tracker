@@ -22,6 +22,9 @@ interface OverviewProps {
   userName: any;
 }
 const div = document.createElement("div");
+const styles = {
+  marginBottom: '70px',
+}
 div.style.fontWeight = "bold";
 const Overview: React.FunctionComponent<OverviewProps> = () => {
   const [optSmModal, setOptSmModal] = useState(false);
@@ -217,7 +220,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
 
 
 
-    <div className="text-center">
+    <div className="text-center" style={styles}>
       <table>
         <thead>
           <tr>
