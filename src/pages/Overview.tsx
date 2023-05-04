@@ -76,7 +76,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
   useEffect(() => {
 
     axios.get(`${baseURL}/my_active_challenge?username=${sessionStorage.getItem("userName")}`).then((response) => {
-      setCurrentChallenge(response.data.name)
+      setCurrentChallenge(response.data)
     });
 
     axios.get(`${baseURL}/all_challenges`).then((response) => {
@@ -201,18 +201,28 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       <table>
         <thead>
           <tr>
-            <th>User Details</th>
+            <th>Profile</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>UserName - {sessionStorage.getItem("userName")}</strong></td>
+            <td><strong>UserName  :   {sessionStorage.getItem("userName")}</strong></td>
           </tr>
           {/* <tr>
             <td><strong>User Email Address -</strong> {sessionStorage.getItem("mail")}</td>
           </tr> */}
           <tr>
-            <td><strong>Current Step Count - {stepCount?.steps}</strong></td>
+            <td><strong>Height   :    {userDetails?.height}</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Weight   :    {userDetails?.weight}</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Rewards available to redeem  : {userDetails?.available_points}</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Total Rewards Earned : {userDetails?.till_today_points
+            }</strong></td>
           </tr>
         </tbody>
       </table>
@@ -224,15 +234,18 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       <table>
         <thead>
           <tr>
-            <th>Challenge Details</th>
+            <th>My Challenges</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Challenge Name -{currentChallenge}</strong></td>
+            <td><strong>{`${currentChallenge?.name}  (Starts : ${currentChallenge?.startDate} --> Ends : ${currentChallenge?.endDate})`}</strong></td>
           </tr>
           <tr>
-            <td><strong>Step Count -{stepCount?.steps}</strong></td>
+            <td><strong>Step Count : {stepCount?.steps}</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Rewards :  {currentChallenge?.reward}</strong></td>
           </tr>
         </tbody>
       </table>
@@ -258,11 +271,14 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
                 <div key={elem.id} className="d-flex justify-content-between">
                   <p>
                     {userDetails?.challenge_id && elem.id !== userDetails?.challenge_id &&
+
                       <strong>
-                        {`${elem.name} (${elem.startDate} - ${elem.endDate})`}
+                        {`${elem.name} (Starts : ${elem.startDate} --> Ends : ${elem.endDate})`}
                       </strong>
+
                     }
-                  </p>                  <div className="align-self-center">
+                  </p>
+                  <div className="align-self-center" style={{ width: '500px' }}>
                     {userDetails?.challenge_id && elem.id != userDetails?.challenge_id && <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>
                       join Challenge
                     </MDBBtn>}

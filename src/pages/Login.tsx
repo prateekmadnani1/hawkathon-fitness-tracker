@@ -12,12 +12,13 @@ import {
     from 'mdb-react-ui-kit';
 import React from 'react';
 
-
 interface LoginProps {
     pushLoginCreds: any
 }
 
-
+const styles = {
+    marginBottom: '70px',
+}
 const Login: React.FunctionComponent<LoginProps> = ({ pushLoginCreds }) => {
 
     function checkUserCreds() {
@@ -30,20 +31,17 @@ const Login: React.FunctionComponent<LoginProps> = ({ pushLoginCreds }) => {
         <MDBContainer className="my-5">
             <MDBCard>
                 <MDBRow className='g-0'>
-
-                    <MDBCol md='6'>
-                        <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp' alt="login form" className='rounded-start w-100' />
-                    </MDBCol>
+                    <div className="text-center" style={styles} >
+                        <MDBCol md='6' className='text-center' >
+                            <MDBCardImage src='bhn_logo.png' alt='login form' className='rounded-start w-100' />
+                        </MDBCol></div>
 
                     <MDBCol md='6'>
                         <MDBCardBody className='d-flex flex-column'>
 
-                            <div className='d-flex flex-row mt-2'>
-                                <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219' }} />
-                                <span className="h1 fw-bold mb-0">Logo</span>
-                            </div>
 
-                            <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
+
+                            {/* <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5> */}
                             <MDBInput wrapperClass='mb-4' label='user name' id='user' type='email' size="lg" />
                             {/* <MDBInput wrapperClass='mb-4' label='Email address' id='mail' type='email' size="lg" /> */}
                             <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' size="lg" />

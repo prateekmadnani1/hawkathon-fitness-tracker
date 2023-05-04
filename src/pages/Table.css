@@ -9,7 +9,7 @@ table {
 }
 
 th {
-  background: linear-gradient(to bottom, #e4d3d3, #d4c2c2);
+  background: linear-gradient(to bottom, #88e06e, #88e06e);
   color: #444;
   padding: 12px;
   text-align: left;
@@ -39,7 +39,8 @@ td:hover {
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     display: block;
     padding: 10px;
   }
