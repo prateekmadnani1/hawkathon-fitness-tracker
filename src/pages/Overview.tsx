@@ -140,57 +140,48 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       </MDBModalDialog>
     </MDBModal>
 
-    <div>
+    <div className="text-center">
+  <table>
+    <thead>
+      <tr>
+        <th>User Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>UserName -</strong> {sessionStorage.getItem("userName")}</td>
+      </tr>
+      <tr>
+        <td><strong>User Email Address -</strong> {sessionStorage.getItem("mail")}</td>
+      </tr>
+      <tr>
+        <td><strong>Current Step Count - </strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+    <div className="text-center">
       <table>
         <thead>
           <tr>
-            <th>User Details</th>
+            <th>Challenge Details</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>UserName - {sessionStorage.getItem("userName")}</td>
+            <td><strong>Challenge Name -</strong></td>
           </tr>
           <tr>
-            <td>User Email Address - {sessionStorage.getItem("mail")}</td>
-          </tr>
-          <tr>
-            <td>Current Step Count - </td>
+            <td><strong>Step Count -</strong></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Participation</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Challenge Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Steps</td>
-          </tr>
-          <tr>
-            <td>Step Count</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div>
+    <div className="text-center">
       <table>
         <thead>
           <tr>
@@ -200,24 +191,28 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       </table>
     </div>
 
-    <div>
-      <MDBCard>
-        <MDBCardBody>
-          <MDBCardTitle>Join Challenge</MDBCardTitle>
-          <MDBCardText>
-            {allChallenges && Object.values(allChallenges).map((elem: any) => (
-              <div key={elem.id}>
-                <p>{elem.name}</p>
-                <div>
-                  <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>join Challenge</MDBBtn>
-                </div>
+    <div style={{ overflowY: 'scroll', height: '500px' }}>
+  <MDBCard>
+    <MDBCardBody>
+      <MDBCardTitle>Join Challenge</MDBCardTitle>
+      <MDBCardText>
+        {allChallenges &&
+          Object.values(allChallenges).map((elem: any) => (
+            <div key={elem.id} className="d-flex justify-content-between">
+              <p>{elem.name}</p>
+              <div className="align-self-center">
+                <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>
+                  join Challenge
+                </MDBBtn>
               </div>
-            ))}
+            </div>
+          ))}
+      </MDBCardText>
+    </MDBCardBody>
+  </MDBCard>
+</div>
 
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-    </div>
+
 
   </>)
 }
