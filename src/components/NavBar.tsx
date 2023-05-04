@@ -24,8 +24,8 @@ export const NavBar: React.FunctionComponent<NavBarProps> = () => {
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
                 {/* <MDBBtn rounded onClick={test}>Join Challenge</MDBBtn>
-                <MDBBtn rounded onClick={toggleShow}>Home</MDBBtn> */}
-                <MDBBtn rounded onClick={test}>Log out</MDBBtn>
+                <MDBBtn rounded onClick={toggleShow}>Home</MDBBtn> 
+                <MDBBtn rounded onClick={test}>Log out</MDBBtn>*/}
             </MDBContainer>
         </MDBNavbar>
 
