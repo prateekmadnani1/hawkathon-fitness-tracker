@@ -6,6 +6,8 @@ import axios from "axios";
 
 import Login from './pages/Login';
 import Overview from './pages/Overview';
+import { JoinChallengePage } from './pages/JoinChallengePage';
+import { NavBar } from './components/NavBar';
 function App() {
   const navigate = useNavigate();
   const [post, setPost] = useState<any>();
@@ -20,7 +22,7 @@ function App() {
           title: "Hello World!",
           body: "This is a new post."
         })
-        .then((response) => {
+        .then((response: any) => {
           setPost(response.data);
         });
 
@@ -31,9 +33,12 @@ function App() {
   }
   return (
     <>
+      <NavBar></NavBar>
       <Routes>
         <Route path='/' element={<Login pushLoginCreds={getLoginCreds} />} ></Route>
         <Route path='/overview' element={<Overview userName={userName} />}></Route>
+        {/* <Route path='/join' element={<JoinChallengePage info={undefined}></JoinChallengePage>}></Route> */}
+
       </Routes>
 
     </>

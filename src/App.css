@@ -71,3 +71,9 @@ body {
 .popup-buttons button {
   margin-left: 10px;
 }
+
+.table-container {
+  height: 300px;
+  /* or whatever height you want */
+  overflow-y: scroll;
+}
