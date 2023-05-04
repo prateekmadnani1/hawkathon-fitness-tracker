@@ -19,6 +19,7 @@ import {
   MDBCardText,
   MDBCardImage,
 } from 'mdb-react-ui-kit';
+import Dialog from 'react-bootstrap-dialog';
 
 import { JoinGroupForm } from '../components/JoinGroupForm';
 import { ConfirmationModal } from '../components/Modals/ConfirmationModal';
@@ -30,157 +31,115 @@ interface OverviewProps {
 }
 const div = document.createElement("div");
 div.style.fontWeight = "bold";
-const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
+const Overview: React.FunctionComponent<OverviewProps> = () => {
+  const [optSmModal, setOptSmModal] = useState(false);
   const [scrollableModal, setScrollableModal] = useState(false);
-  const [confirmStatus, setConfirmStatus] = useState();
-  const [allChallenges, setAllChallenges] = React.useState({});
+  const [confirmStatus, setConfirmStatus] = useState(false);
+  const [allChallenges, setAllChallenges] = useState(null);
+  const [userDetails, setUserDetails] = useState<any>(null)
   const [post, setPost] = useState<any>();
   const [error, setError] = React.useState(null);
   const [popStatus, setPopUpStatus] = useState<any>(false);
+  const [joinChallengeStatus, setJoinChallengeStatus] = useState<any>(false)
   const navigate = useNavigate();
   const baseURL: any = "http://0.0.0.0:9001"
 
-  function test(e: any) {
-    setScrollableModal(!scrollableModal)
+  function handleJoinChallenge(this: any, id: any) {
+    console.log(id);
+    if (userDetails.challenge_id) {
+      // setJoinChallengeStatus(false)
+      setOptSmModal(!optSmModal);
+    }
+    setJoinChallengeStatus(true)
+    if (joinChallengeStatus) {
+      const url = `${baseURL}/join_challenge?username=${sessionStorage.getItem("userName")}&challenge_id=${id}`
+      axios
+        .post(url, {
+          title: "Hello World!",
+          body: "This is a new post."
+        })
+        .then((response) => {
+          setPost(response);
+          setJoinChallengeStatus(false)
+        });
+    }
   }
 
-  function setConfirmationStatus(e: any) {
-    setConfirmStatus(e);
-  }
-  function viewGroups() {
-    navigate('/groups')
-  }
+  console.log(post);
 
-  function logout() {
-    navigate('/')
-  }
-
-  // function joinGroup(elem: any, groupId: any) {
-  //   setPopUpStatus(true)
-  //   console.log(elem, groupId);
-  //   const groupName = elem
-
-
-  // const baseURL = `http://0.0.0.0:9001/groups?username=${userName}&group_id=${groupId}&group_name=${groupName}&switch_group=${switchStatus}`
-  // axios
-  //     .post(baseURL, {
-  //         title: "join group",
-  //         body: "This is a new post."
-  //     })
-  //     .then((response) => {
-  //         setPost(response.data)
-  //     }).catch(error => {
-  //         setError(error);
-  //     });
-  // if (post) {
-  //     setConfirmStatus(post)
-  // }
-  // else if (error) {
-  //     setConfirmStatus(error);
-  // }
-  //}
-  const handleClosePopup = () => {
-    setPopUpStatus(false);
-  };
 
   console.log(sessionStorage.getItem("userName"));
 
-  const handleOK = () => {
-    console.log('OK button clicked');
-    setPopUpStatus(false);
-  };
-
-  const handleCancel = () => {
-    console.log('Cancel button clicked');
-    setPopUpStatus(false);
-  };
-
   useEffect(() => {
     axios.get(`${baseURL}/all_challenges`).then((response) => {
-      setAllChallenges(response.data);
+      setAllChallenges(response.data)
     });
-  }, [allChallenges]);
+
+    axios
+      .post(`${baseURL}/user?username=${sessionStorage.getItem("userName")}`, {
+        title: "Hello World!",
+        body: "This is a new post."
+      })
+      .then((response) => {
+        setUserDetails(response.data);
+      });
+  }, [joinChallengeStatus]);
+
+  console.log(userDetails);
 
 
 
   const [basicModal, setBasicModal] = useState(false);
 
-  const toggleShow = () => setBasicModal(!basicModal);
+  const toggleShow = () => setOptSmModal(!optSmModal);
+  const handleJoinChallengeStatus = () => {
+    setJoinChallengeStatus(true)
+    setOptSmModal(!optSmModal);
+
+  }
+  const toggleConfirmation = () => setConfirmStatus(!confirmStatus)
   return (<>
     <NavBar></NavBar>
 
-    {/* <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
-      <MDBModalDialog>
+    <MDBModal show={optSmModal} tabIndex='-1' setShow={setOptSmModal}>
+      <MDBModalDialog size='sm'>
         <MDBModalContent>
           <MDBModalHeader>
-            <MDBModalTitle>Modal title</MDBModalTitle>
+            <MDBModalTitle>Small modal</MDBModalTitle>
             <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
           </MDBModalHeader>
           <MDBModalBody>
-            <JoinGroupForm getAllGroups={allgroup} close={toggleShow} confirmationStatus={setConfirmationStatus}></JoinGroupForm>
-          </MDBModalBody>
-        </MDBModalContent>
-      </MDBModalDialog>
-    </MDBModal> */}
-
-
-    {/* <MDBModal show={scrollableModal} setShow={setScrollableModal} tabIndex='-1'>
-      <MDBModalDialog scrollable>
-        <MDBModalContent>
-          <MDBModalHeader>
-            <MDBModalTitle>Modal title</MDBModalTitle>
-            <MDBBtn
-              className='btn-close'
-              color='none'
-              onClick={() => setScrollableModal(!scrollableModal)}
-            ></MDBBtn>
-          </MDBModalHeader>
-          <MDBModalBody>
-
-            <p> {allgroup && Object.entries(allgroup).map(([key, elem]: any) => (
-              <div>
-                {elem.group_name}
-                {elem.members.map((member: any) => (
-                  <div>{member}</div>
-                ))}
-                <div><MDBBtn rounded onClick={() => joinGroup(elem, key)}>Join Groups</MDBBtn>
-                </div>
-              </div>
-
-            ))}</p>
-
+            {<p>you are already in challenge do you want to switch challenge..?</p>}
           </MDBModalBody>
           <MDBModalFooter>
-            <MDBBtn color='secondary' onClick={() => setScrollableModal(!setScrollableModal)}>
+            <MDBBtn color='secondary' onClick={toggleShow}>
               Close
             </MDBBtn>
+            <MDBBtn onClick={handleJoinChallengeStatus}>switch</MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>
       </MDBModalDialog>
-    </MDBModal> */}
+    </MDBModal>
 
 
+    <MDBModal animationDirection='bottom' show={confirmStatus} tabIndex='-1' setShow={setConfirmStatus}>
+      <MDBModalDialog position='bottom' frame>
+        <MDBModalContent>
+          <MDBModalBody className='py-1'>
+            <div className='d-flex justify-content-center align-items-center my-3'>
+              <p className='mb-0'>We use cookies to improve your website experience</p>
+              <MDBBtn color='success' size='sm' className='ms-2' onClick={toggleShow}>
+                Ok, thanks
+              </MDBBtn>
+              <MDBBtn size='sm' className='ms-2'>
+                Learn more
+              </MDBBtn>
+            </div>
+          </MDBModalBody>
+        </MDBModalContent>
+      </MDBModalDialog>
+    </MDBModal>
 
-
-    {/* {confirmStatus && <ConfirmationModal confirmationStatus={confirmStatus}></ConfirmationModal>
-    } */}
-
-    {/* {popStatus && (
-      <Popup
-        message="Are you sure you want to do this?"
-        onOK={handleOK}
-        onCancel={handleCancel}
-      />
-    )} */}
-
-
-    {/* -------------------------------------------------------------------------------------- */}
-    {/* <MDBNavbar expand='lg' light bgColor='light'>
-            <MDBContainer fluid>
-                <MDBBtn rounded onClick={logout}>Log out</MDBBtn>
-
-            </MDBContainer>
-        </MDBNavbar> */}
     <div>
       <table>
         <thead>
@@ -246,7 +205,14 @@ const Overview: React.FunctionComponent<OverviewProps> = ({ userName }) => {
         <MDBCardBody>
           <MDBCardTitle>Join Challenge</MDBCardTitle>
           <MDBCardText>
-
+            {allChallenges && Object.values(allChallenges).map((elem: any) => (
+              <div key={elem.id}>
+                <p>{elem.name}</p>
+                <div>
+                  <MDBBtn rounded onClick={() => handleJoinChallenge(elem.id)}>join Challenge</MDBBtn>
+                </div>
+              </div>
+            ))}
 
           </MDBCardText>
         </MDBCardBody>
