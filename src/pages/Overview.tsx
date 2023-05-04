@@ -175,7 +175,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
           <MDBModalBody>
 
             {Object.entries(leaderBoardData?.participation_score).map(([key, elem]: any) => (
-              <p><strong>{`${key} --> ${elem}`}</strong></p>
+              <p><strong>{`${key} : ${elem}`} steps</strong></p>
 
 
             ))}
@@ -212,17 +212,17 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
             <td><strong>User Email Address -</strong> {sessionStorage.getItem("mail")}</td>
           </tr> */}
           <tr>
-            <td><strong>Height   :    {userDetails?.height}</strong></td>
+            <td><strong>Height   :    {userDetails?.height} ft</strong></td>
           </tr>
           <tr>
-            <td><strong>Weight   :    {userDetails?.weight}</strong></td>
+            <td><strong>Weight   :    {userDetails?.weight} kg</strong></td>
           </tr>
           <tr>
-            <td><strong>Rewards available to redeem  : {userDetails?.available_points}</strong></td>
+            <td><strong>Rewards available to redeem  : {userDetails?.available_points} fit points</strong></td>
           </tr>
           <tr>
             <td><strong>Total Rewards Earned : {userDetails?.till_today_points
-            }</strong></td>
+            } fit points</strong></td>
           </tr>
         </tbody>
       </table>
@@ -239,13 +239,13 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
         </thead>
         <tbody>
           <tr>
-            <td><strong>{`${currentChallenge?.name}  (Starts : ${currentChallenge?.startDate} --> Ends : ${currentChallenge?.endDate})`}</strong></td>
+            <td><strong>{`${currentChallenge?.name}  (Start Date : ${currentChallenge?.startDate}  End Date : ${currentChallenge?.endDate})`}</strong></td>
           </tr>
           <tr>
             <td><strong>Step Count : {stepCount?.steps}</strong></td>
           </tr>
           <tr>
-            <td><strong>Rewards :  {currentChallenge?.reward}</strong></td>
+            <td><strong>Rewards :  {currentChallenge?.reward} fit points</strong></td>
           </tr>
         </tbody>
       </table>
@@ -273,7 +273,7 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
                     {userDetails?.challenge_id && elem.id !== userDetails?.challenge_id &&
 
                       <strong>
-                        {`${elem.name} (Starts : ${elem.startDate} --> Ends : ${elem.endDate})`}
+                        {`${elem.name} (Start Date : ${elem.startDate} End Date : ${elem.endDate})`}
                       </strong>
 
                     }
