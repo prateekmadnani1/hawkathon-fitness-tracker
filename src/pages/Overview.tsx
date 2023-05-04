@@ -15,6 +15,14 @@ import {
   MDBCardBody,
   MDBCardTitle,
   MDBCardText,
+  MDBDropdown,
+  MDBDropdownMenu,
+  MDBDropdownItem,
+  MDBDropdownToggle,
+  MDBRow,
+  MDBCol,
+  MDBCollapse,
+  MDBBadge,
 } from 'mdb-react-ui-kit';
 
 import { NavBar } from '../components/NavBar';
@@ -34,14 +42,14 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
   const [userDetails, setUserDetails] = useState<any>(null)
   const [currentChallenge, setCurrentChallenge] = useState<any>();
   const [post, setPost] = useState<any>();
-
   const [error, setError] = React.useState(null);
   const [stepCount, setStepCount] = useState<any>();
   const [joinChallengeStatus, setJoinChallengeStatus] = useState<any>()
   const [userChlId, setUserChlId] = useState();
   const [challengeId, setChallengeId] = useState();
   const [leaderBoardData, setLeaderBoardData] = useState<any>();
-
+  const [showFirstElement, setShowFirstElement] = useState(false);
+  const [reedeemModalStatus, setReedeemModalStatus] = useState<any>();
   const baseURL: any = "http://0.0.0.0:9001"
 
   function checkForSwitch() {
@@ -125,6 +133,15 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
     assignToChallenge(userChlId);
   }
   const toggleConfirmation = () => setConfirmStatus(!confirmStatus)
+
+
+  //------------redeem----------
+
+  const toggleFirstElement = () => setShowFirstElement(!showFirstElement);
+
+  const showReedemModal = () => setReedeemModalStatus(!reedeemModalStatus);
+
+
   return (<>
     <NavBar></NavBar>
 
@@ -192,6 +209,21 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
       </MDBModalDialog>
     </MDBModal>}
 
+
+    <MDBModal animationDirection='bottom' show={reedeemModalStatus} tabIndex='-1' setShow={setReedeemModalStatus}>
+      <MDBModalDialog position='bottom' frame>
+        <MDBModalContent>
+          <MDBModalBody className='py-1'>
+            <div className='d-flex justify-content-center align-items-center my-3'>
+              <p className='mb-0'>Your Points are Reedeem</p>
+              <MDBBtn color='success' size='sm' className='ms-2' onClick={showReedemModal}>
+                got it
+              </MDBBtn>
+            </div>
+          </MDBModalBody>
+        </MDBModalContent>
+      </MDBModalDialog>
+    </MDBModal>
 
 
 
@@ -289,14 +321,46 @@ const Overview: React.FunctionComponent<OverviewProps> = () => {
                       Leader Board
                     </MDBBtn>}
                   </div>
-
-
                 </div>
               ))}
           </MDBCardText>
         </MDBCardBody>
       </MDBCard>
+      {/* <div>
+        <MDBDropdown group>
+          <MDBDropdownToggle color='success'>Action</MDBDropdownToggle>
+          <MDBDropdownMenu>
+            <MDBDropdownItem link>Action</MDBDropdownItem>
+            <MDBDropdownItem link>Another action</MDBDropdownItem>
+            <MDBDropdownItem link>Something else here</MDBDropdownItem>
+          </MDBDropdownMenu>
+        </MDBDropdown>
+      </div> */}
+      <div>
+
+        <MDBBtn onClick={toggleFirstElement}> Redeem      <MDBBadge className='ms-2' color='danger'>
+          8
+        </MDBBadge></MDBBtn>
+        <MDBRow>
+          <MDBCol>
+            <MDBCollapse show={showFirstElement} className='mt-3'>
+              <MDBCard>
+                <MDBCardBody>
+                  <MDBCardTitle>Card title</MDBCardTitle>
+                  <MDBCardText>
+                    <div>
+                      <input type='text' maxLength={100} minLength={10} placeholder='value' />
+                      <MDBBtn onClick={showReedemModal}> Redeem</MDBBtn>
+                    </div>
+                  </MDBCardText>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCollapse>
+          </MDBCol>
+        </MDBRow>
+      </div>
     </div>
+
 
 
 
